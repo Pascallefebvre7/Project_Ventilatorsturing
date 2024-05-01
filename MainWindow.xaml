@@ -1,0 +1,30 @@
+﻿<Window x:Class="Project_Ventilatorsturing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Project_Ventilatorsturing"
+        mc:Ignorable="d"
+        Title="MainWindow" SizeToContent="Height" Width="400">
+    <DockPanel>
+        <GroupBox Header="Select COM-port" Margin="10"
+          DockPanel.Dock="Top">
+            <ComboBox Name="cbxComPort" Margin="10" 
+              SelectionChanged="cbxComPort_SelectionChanged"></ComboBox>
+        </GroupBox>
+        <GroupBox Header="FAN-control" DockPanel.Dock="Top" Margin="10,0,10,10">
+            <DockPanel>
+                <Button Content="Fan ON" x:Name="On" Width="100"/>
+                <Button Content="Fan OFF" x:Name="Off" Width="100"/>
+            </DockPanel>
+
+        </GroupBox>
+        <GroupBox Header="Fan state" DockPanel.Dock="Top" Margin="10,0,10,10" Height="50">
+            <Canvas/>
+        </GroupBox>
+        <DockPanel>
+            <Label Height="30" x:Name="TempLabel" Content="Measured temp:" Margin="5"></Label>
+            <Label Height="30"  Content="...°C" Name="lblTemp" Margin="5"></Label>
+        </DockPanel>
+    </DockPanel>
+</Window>
