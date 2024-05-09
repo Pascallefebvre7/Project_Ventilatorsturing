@@ -6,6 +6,16 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
+      "Project_Ventilatorsturing/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "System.IO": "4.3.0",
+          "System.IO.Ports": "8.0.0"
+        },
+        "runtime": {
+          "Project_Ventilatorsturing.dll": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/1.1.0": {},
       "Microsoft.NETCore.Targets/1.1.0": {},
       "Newtonsoft.Json/13.0.3": {
@@ -127,6 +137,11 @@
     }
   },
   "libraries": {
+    "Project_Ventilatorsturing/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
       "serviceable": true,

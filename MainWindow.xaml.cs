@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.IO.Ports;
+using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Project_Ventilatorsturing
 {
@@ -23,7 +25,7 @@ namespace Project_Ventilatorsturing
     /// </summary>
     public partial class MainWindow : Window
     {
-        SerialPort _serialPort;
+        private readonly SerialPort _serialPort;
         private bool isVentilatorOn;
 
         public MainWindow()
@@ -57,38 +59,81 @@ namespace Project_Ventilatorsturing
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            _serialPort.WriteLine("getData");
+            try
+            {
+                _serialPort.WriteLine("getData");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending command: {ex.Message}");
+            }
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            string data = _serialPort.ReadLine().Trim();
-            string[] values = data.Split(',');
-
-            if (values.Length == 2 && values[0] == "temperature")
+            try
             {
-                double temperature = Convert.ToDouble(values[1]);
+                string data = _serialPort.ReadLine().Trim();
+                string[] values = data.Split(',');
 
-                // Update de GUI met de ontvangen temperatuur
-                Dispatcher.Invoke(() =>
+                if (values.Length == 2 && values[0] == "temperature")
                 {
-                    lblTemp.Content = $"Temperature: {temperature}%";
-
-                    // Controleer of de ventilator moet worden ingeschakeld of uitgeschakeld
-                    if (temperature > 20 && !isVentilatorOn)
-                    {
-                        isVentilatorOn = true;
-                        lblTemp.Content = "Ventilator: AAN";
-                    }
-                    else if (temperature < 20 && isVentilatorOn)
-                    {
-                        isVentilatorOn = false;
-                        lblTemp.Content = "Ventilator: UIT";
-                    }
-                });
+                    double temperature = Convert.ToDouble(values[1]);
+                    UpdateUI(temperature);
+                }
+                else if (e.EventType == SerialData.Chars)
+                {
+                    string data1 = _serialPort.ReadLine();
+                    SensorData gegevens = JsonConvert.DeserializeObject<SensorData>(data1);
+                    UpdateUI(gegevens);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error processing data: {ex.Message}");
             }
         }
+        private void UpdateUI(double temperature)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                lblTemp.Content = $"Temperature: {temperature}%";
 
-        
+                if (temperature > 20 && !isVentilatorOn)
+                {
+                    isVentilatorOn = true;
+                    lblTemp.Content = "Ventilator: AAN";
+                }
+                else if (temperature < 20 && isVentilatorOn)
+                {
+                    isVentilatorOn = false;
+                    lblTemp.Content = "Ventilator: UIT";
+                }
+            });
+        }
+        private void UpdateUI(SensorData gegevens)
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (gegevens != null)
+                {
+                    lblTemp.Content = $"{gegevens.Temperature}°C";
+                    On.Background = ((gegevens.Buttons & 1) != 0) ? Brushes.Green : Brushes.Red;
+                    Off.Background = ((gegevens.Buttons & 1) != 0) ? Brushes.Green : Brushes.Red;
+                }
+            });
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Dispose();
+            base.OnClosing(e);
+        }
+
+        public void Dispose()
+        {
+            _serialPort?.Dispose();
+        }
+
+
     }
 }

@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Tfa9GyUx+JdmYrRdntV/GEWXDeuezYBkPNwBd3HY4bRJoePAgyz8343smgVmtkz99dv/6tRPF0ZoDB0ziRnJEg==",
+  "dgSpecHash": "22FCI7NPTtzRCSu/R70bpO/4Bx0F2V658OgGbhipGdtcr6bKXzyTs8PWkbHhet88sP09aS9/ySpdDdOvQxSvwQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\Project_Ventilatorsturing.csproj",
+  "projectFilePath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\Project_Ventilatorsturing.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pasca\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\pasca\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\pasca\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\pasca\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\8.0.0\\runtime.linux-arm.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
     "C:\\Users\\pasca\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\8.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
     "C:\\Users\\pasca\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\8.0.0\\runtime.linux-x64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",

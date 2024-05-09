@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\Project_Ventilatorsturing.csproj": {}
+    "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\Project_Ventilatorsturing.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\Project_Ventilatorsturing.csproj": {
+    "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\Project_Ventilatorsturing.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\Project_Ventilatorsturing.csproj",
+        "projectUniqueName": "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\Project_Ventilatorsturing.csproj",
         "projectName": "Project_Ventilatorsturing",
-        "projectPath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\Project_Ventilatorsturing.csproj",
+        "projectPath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\Project_Ventilatorsturing.csproj",
         "packagesPath": "C:\\Users\\pasca\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Schooljaar 2023-2024\\ICT (C#)\\Project OOP\\Project_Ventilatorsturing\\obj\\",
+        "outputPath": "C:\\Users\\pasca\\OneDrive\\Documenten\\Ventilatorsturing\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pasca\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,10 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "System.IO": {
               "target": "Package",
               "version": "[4.3.0, )"
