@@ -14,13 +14,14 @@
         </GroupBox>
         <GroupBox Header="FAN-control" DockPanel.Dock="Top" Margin="10,0,10,10">
             <DockPanel>
-                <Button Content="Fan ON" x:Name="On" Width="100"/>
-                <Button Content="Fan OFF" x:Name="Off" Width="100"/>
+                <Button Content="Fan ON" x:Name="On" Width="100" Click="On_Click"/>
+                <Button Content="Fan OFF" x:Name="Off" Width="100" Click="Off_Click"/>
             </DockPanel>
-
         </GroupBox>
         <GroupBox Header="Fan state" DockPanel.Dock="Top" Margin="10,0,10,10" Height="50">
-            <Canvas/>
+            <Canvas x:Name="FanCanvas">
+                <Label Height="12" x:Name="Fanlbl" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="8" VerticalAlignment="Center" Width="348"/>
+            </Canvas>
         </GroupBox>
         <DockPanel>
             <Label Height="30" x:Name="TempLabel" Content="Measured temp:" Margin="5"></Label>

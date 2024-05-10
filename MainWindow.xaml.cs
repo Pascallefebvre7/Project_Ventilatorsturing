@@ -56,6 +56,33 @@ namespace Project_Ventilatorsturing
                 }
             }
         }
+        private void On_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _serialPort.WriteLine("FanON");
+
+                FanCanvas.Background = Brushes.Green;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending command: {ex.Message}");
+            }
+        }
+
+        private void Off_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _serialPort.WriteLine("FanOFF");
+
+                FanCanvas.Background = Brushes.Red;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending command: {ex.Message}");
+            }
+        }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -97,17 +124,17 @@ namespace Project_Ventilatorsturing
         {
             Dispatcher.BeginInvoke(() =>
             {
-                lblTemp.Content = $"Temperature: {temperature}%";
+                lblTemp.Content = $"Temperature: {temperature}°C";
 
-                if (temperature > 20 && !isVentilatorOn)
+                if (temperature > 20)
                 {
-                    isVentilatorOn = true;
-                    lblTemp.Content = "Ventilator: AAN";
+                    Fanlbl.Content = "Ventilator: ON";
+                    FanCanvas.Background = Brushes.LightGreen;
                 }
-                else if (temperature < 20 && isVentilatorOn)
+                else
                 {
-                    isVentilatorOn = false;
-                    lblTemp.Content = "Ventilator: UIT";
+                    Fanlbl.Content = "Ventilator: OFF";
+                    FanCanvas.Background = Brushes.Orange;
                 }
             });
         }
@@ -118,8 +145,6 @@ namespace Project_Ventilatorsturing
                 if (gegevens != null)
                 {
                     lblTemp.Content = $"{gegevens.Temperature}°C";
-                    On.Background = ((gegevens.Buttons & 1) != 0) ? Brushes.Green : Brushes.Red;
-                    Off.Background = ((gegevens.Buttons & 1) != 0) ? Brushes.Green : Brushes.Red;
                 }
             });
         }
@@ -133,7 +158,5 @@ namespace Project_Ventilatorsturing
         {
             _serialPort?.Dispose();
         }
-
-
     }
 }
