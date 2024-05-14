@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project_Ventilatorsturing
 {
-    internal class SensorData
+    internal class SensorData: Data
     {
         public double Temperature { get; set; }
         public int Buttons { get; set; }

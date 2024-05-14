@@ -27,20 +27,29 @@ namespace Project_Ventilatorsturing
     {
         private readonly SerialPort _serialPort;
         private bool isVentilatorOn;
+        private const int SERIAL_PORT_BAUDRATE = 9600;
+        private const string FAN_ON_COMMAND = "FanON";
+        private const string FAN_OFF_COMMAND = "FanOFF";
+        private const string GET_DATA_COMMAND = "getData";
+
+        private List<string> availableComPorts = new List<string>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            cbxComPort.Items.Add("None");
-            foreach (string s in SerialPort.GetPortNames())
-                cbxComPort.Items.Add(s);
+            availableComPorts.Add("None");
+            availableComPorts.AddRange(SerialPort.GetPortNames());
+
+            foreach (string port in availableComPorts)
+                cbxComPort.Items.Add(port);
 
             _serialPort = new SerialPort();
-            _serialPort.BaudRate = 9600;
+            _serialPort.BaudRate = SERIAL_PORT_BAUDRATE;
 
             _serialPort.DataReceived += SerialPort_DataReceived;
         }
+
 
         private void cbxComPort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -56,39 +65,12 @@ namespace Project_Ventilatorsturing
                 }
             }
         }
-        private void On_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _serialPort.WriteLine("FanON");
-
-                FanCanvas.Background = Brushes.Green;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error sending command: {ex.Message}");
-            }
-        }
-
-        private void Off_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                _serialPort.WriteLine("FanOFF");
-
-                FanCanvas.Background = Brushes.Red;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error sending command: {ex.Message}");
-            }
-        }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             try
             {
-                _serialPort.WriteLine("getData");
+                _serialPort.WriteLine(GET_DATA_COMMAND);
             }
             catch (Exception ex)
             {
@@ -108,10 +90,9 @@ namespace Project_Ventilatorsturing
                     double temperature = Convert.ToDouble(values[1]);
                     UpdateUI(temperature);
                 }
-                else if (e.EventType == SerialData.Chars)
+                else
                 {
-                    string data1 = _serialPort.ReadLine();
-                    SensorData gegevens = JsonConvert.DeserializeObject<SensorData>(data1);
+                    SensorData gegevens = JsonConvert.DeserializeObject<SensorData>(data);
                     UpdateUI(gegevens);
                 }
             }
@@ -120,21 +101,57 @@ namespace Project_Ventilatorsturing
                 MessageBox.Show($"Error processing data: {ex.Message}");
             }
         }
+        private void On_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _serialPort.WriteLine(FAN_ON_COMMAND);
+
+                FanCanvas.Background = Brushes.Green;
+                isVentilatorOn = true; // Update de status van de ventilator
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending command: {ex.Message}");
+            }
+        }
+
+        private void Off_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _serialPort.WriteLine(FAN_OFF_COMMAND);
+
+                FanCanvas.Background = Brushes.Red;
+                isVentilatorOn = false;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending command: {ex.Message}");
+            }
+        }
         private void UpdateUI(double temperature)
         {
             Dispatcher.BeginInvoke(() =>
             {
-                lblTemp.Content = $"Temperature: {temperature}°C";
-
-                if (temperature > 20)
+                // Controleer eerst of een van de knoppen is ingedrukt
+                if (isVentilatorOn)
                 {
-                    Fanlbl.Content = "Ventilator: ON";
-                    FanCanvas.Background = Brushes.LightGreen;
+                    FanCanvas.Background = Brushes.Green;
                 }
                 else
                 {
-                    Fanlbl.Content = "Ventilator: OFF";
-                    FanCanvas.Background = Brushes.Orange;
+                    // Controleer de temperatuur als geen van de knoppen is ingedrukt
+                    if (temperature > 25)
+                    {
+                        FanCanvas.Background = Brushes.Green;
+                    }
+                    else
+                    {
+                        FanCanvas.Background = Brushes.Red;
+                    }
                 }
             });
         }
