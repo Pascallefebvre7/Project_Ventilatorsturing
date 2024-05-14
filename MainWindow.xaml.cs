@@ -83,33 +83,35 @@ namespace Project_Ventilatorsturing
             try
             {
                 string data = _serialPort.ReadLine().Trim();
-                string[] values = data.Split(',');
-
-                if (values.Length == 2 && values[0] == "temperature")
-                {
-                    double temperature = Convert.ToDouble(values[1]);
-                    UpdateUI(temperature);
-                }
-                else
-                {
-                    SensorData gegevens = JsonConvert.DeserializeObject<SensorData>(data);
-                    UpdateUI(gegevens);
-                }
+                SensorData gegevens = JsonConvert.DeserializeObject<SensorData>(data);
+                UpdateUI(gegevens);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error processing data: {ex.Message}");
             }
         }
+        private bool isVentilatorRecentlyTurnedOn = false;
         private void On_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 _serialPort.WriteLine(FAN_ON_COMMAND);
 
-                FanCanvas.Background = Brushes.Green;
-                isVentilatorOn = true; // Update de status van de ventilator
+                Fanlbl.Background = Brushes.Green;
+                isVentilatorOn = true;
 
+                isVentilatorRecentlyTurnedOn = true;
+
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromSeconds(5); // Kies hier de gewenste tijd dat u de ventilator aan wilt laten draaien
+                timer.Tick += (s, args) =>
+                {
+                    Fanlbl.Background = Brushes.Red;
+                    isVentilatorRecentlyTurnedOn = false;
+                    timer.Stop();
+                };
+                timer.Start();
             }
             catch (Exception ex)
             {
@@ -117,43 +119,32 @@ namespace Project_Ventilatorsturing
             }
         }
 
+        private bool isVentilatorRecentlyTurnedOff = false;
         private void Off_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 _serialPort.WriteLine(FAN_OFF_COMMAND);
 
-                FanCanvas.Background = Brushes.Red;
+                Fanlbl.Background = Brushes.Red;
                 isVentilatorOn = false;
 
+                isVentilatorRecentlyTurnedOff = true;
+
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Interval = TimeSpan.FromSeconds(5); // // Kies hier de gewenste tijd dat u de ventilator uit wilt laten
+                timer.Tick += (s, args) =>
+                {
+                    Fanlbl.Background = Brushes.Green;
+                    isVentilatorRecentlyTurnedOff = false; 
+                    timer.Stop(); 
+                };
+                timer.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error sending command: {ex.Message}");
             }
-        }
-        private void UpdateUI(double temperature)
-        {
-            Dispatcher.BeginInvoke(() =>
-            {
-                // Controleer eerst of een van de knoppen is ingedrukt
-                if (isVentilatorOn)
-                {
-                    FanCanvas.Background = Brushes.Green;
-                }
-                else
-                {
-                    // Controleer de temperatuur als geen van de knoppen is ingedrukt
-                    if (temperature > 25)
-                    {
-                        FanCanvas.Background = Brushes.Green;
-                    }
-                    else
-                    {
-                        FanCanvas.Background = Brushes.Red;
-                    }
-                }
-            });
         }
         private void UpdateUI(SensorData gegevens)
         {
@@ -162,6 +153,23 @@ namespace Project_Ventilatorsturing
                 if (gegevens != null)
                 {
                     lblTemp.Content = $"{gegevens.Temperature}°C";
+
+                    if (isVentilatorRecentlyTurnedOn)
+                    {
+                        Fanlbl.Background = Brushes.Green;
+                    }
+                    else if (isVentilatorRecentlyTurnedOff)
+                    {
+                        Fanlbl.Background = Brushes.Red;
+                    }
+                    else if (gegevens.Temperature > 25) // Kies hier de gewenste temperatuur
+                    {
+                        Fanlbl.Background = Brushes.Green;
+                    }
+                    else
+                    {
+                        Fanlbl.Background = Brushes.Red;
+                    }
                 }
             });
         }

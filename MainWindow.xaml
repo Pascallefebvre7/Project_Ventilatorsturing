@@ -20,7 +20,7 @@
         </GroupBox>
         <GroupBox Header="Fan state" DockPanel.Dock="Top" Margin="10,0,10,10" Height="50">
             <Canvas x:Name="FanCanvas">
-                <Label Height="12" x:Name="Fanlbl" HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="8" VerticalAlignment="Center" Width="348"/>
+                <Label Height="12" x:Name="Fanlbl" HorizontalAlignment="Center" Canvas.Left="10" Canvas.Top="8" VerticalAlignment="Center" Width="340"/>
             </Canvas>
         </GroupBox>
         <DockPanel>
